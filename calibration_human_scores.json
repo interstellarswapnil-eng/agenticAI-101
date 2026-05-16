@@ -1,0 +1,122 @@
+[
+  {
+    "case_id": "001",
+    "case_type": "clear",
+    "message": "My invoice #4471 won't send to my client. I click send and nothing happens. Been trying for 2 hours and I need to get paid today.",
+    "response_draft": "We're sorry to hear that you're experiencing issues sending invoice #4471. This sounds like a technical problem. We'll investigate this immediately. Please provide any additional details you can about the issue.",
+    "human_scores": {
+      "tone_appropriateness": 4,
+      "issue_addressed": 3,
+      "actionability": 3
+    },
+    "notes": "Should have included examples in actionability. Issue was not addressed confidently."
+  },
+  {
+    "case_id": "003",
+    "case_type": "clear",
+    "message": "Was charged $29 today but I cancelled my Ledgr subscription last month. Refund please.",
+    "response_draft": "I understand you've been charged after canceling your subscription. I apologize for the inconvenience and will initiate a refund for the $29 charge right away. Thank you for your patience.",
+    "human_scores": {
+      "tone_appropriateness": 4,
+      "issue_addressed": 5,
+      "actionability": 5
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "005",
+    "case_type": "clear",
+    "message": "Cancelling my account today. Switching to Bonsai. Your tax features are too basic for my needs.",
+    "response_draft": "I'm sorry to hear that you're considering cancelling your account. Your feedback on our tax features is valuable to us. If there's anything specific we can do to assist you or improve your experience, please let us know. Otherwise, we can proceed with your cancellation.",
+    "human_scores": {
+      "tone_appropriateness": 4,
+      "issue_addressed": 4,
+      "actionability": 4
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "011",
+    "case_type": "ambiguous",
+    "message": "The app is slow. Takes forever to load my dashboard.",
+    "response_draft": "Thank you for bringing this to our attention. We're sorry to hear that your app is slow and that it's taking a long time to load your dashboard. We are looking into this issue and will provide updates as soon as possible.",
+    "human_scores": {
+      "tone_appropriateness": 4,
+      "issue_addressed": 4,
+      "actionability": 4
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "014",
+    "case_type": "ambiguous",
+    "message": "Why can't I see last year's tax summary? I need it for my accountant.",
+    "response_draft": "I understand you need last year's tax summary for your accountant. You can access it by going to the 'Reports' section of your dashboard and selecting the appropriate tax year. If you continue to have trouble locating it, please let me know!",
+    "human_scores": {
+      "tone_appropriateness": 5,
+      "issue_addressed": 5,
+      "actionability": 5
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "016",
+    "case_type": "ambiguous",
+    "message": "I added a discount line but the tax is calculating on the pre-discount amount. Is that right?",
+    "response_draft": "Thank you for reaching out. It appears there is an issue with the tax calculation not accounting for the discount properly. We will investigate this matter and get back to you as soon as possible.",
+    "human_scores": {
+      "tone_appropriateness": 4,
+      "issue_addressed": 4,
+      "actionability": 4
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "018",
+    "case_type": "ambiguous",
+    "message": "Trial ends tomorrow and I haven't decided yet. The tax stuff is great but I find the invoice editor clunky.",
+    "response_draft": "I understand your concerns about the invoice editor. We appreciate your feedback and are always looking for ways to improve. If there's anything specific you'd like help with or if you have more suggestions, please let us know!",
+    "human_scores": {
+      "tone_appropriateness": 4,
+      "issue_addressed": 4,
+      "actionability": 4
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "021",
+    "case_type": "adversarial",
+    "message": "invocie not sneding plz help",
+    "response_draft": "We're sorry to hear that you're having trouble sending your invoice. Our team will look into this issue immediately. Please provide any additional details that might help us resolve it faster.",
+    "human_scores": {
+      "tone_appropriateness": 4,
+      "issue_addressed": 4,
+      "actionability": 3
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "023",
+    "case_type": "adversarial",
+    "message": "FIX YOUR APP. Lost a client because invoices didn't send. This is the THIRD time. UNACCEPTABLE.",
+    "response_draft": "We sincerely apologize for the issues you've encountered with our app and the impact it's had on your business. We take this matter seriously and will prioritize an immediate investigation. Please provide any additional details about the invoices that didn't send, and we'll work to resolve this as quickly as possible.",
+    "human_scores": {
+      "tone_appropriateness": 4,
+      "issue_addressed": 4,
+      "actionability": 4
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "027",
+    "case_type": "adversarial",
+    "message": "I think I might've deleted an invoice by accident. Can you recover invoice #2210?",
+    "response_draft": "To recover a deleted invoice, please go to the 'Invoices' section in your account and check the 'Trash' or 'Deleted Items' folder if available. From there, you should be able to restore invoice #2210. If you need further assistance, let me know!",
+    "human_scores": {
+      "tone_appropriateness": 4,
+      "issue_addressed": 2,
+      "actionability": 3
+    },
+    "notes": ""
+  }
+]

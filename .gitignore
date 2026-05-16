@@ -3,4 +3,6 @@ __pycache__/
 *.pyc
 eval_results_*.json
 rubric_results.json
+calibration_results.json
+judge_results.json
 .claude/
