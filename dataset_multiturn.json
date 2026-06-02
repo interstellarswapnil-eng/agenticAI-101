@@ -1,0 +1,382 @@
+[
+  {
+    "scenario_id": "MT-001",
+    "scenario_type": "memory_required",
+    "failure_mode": 1,
+    "description": "Invoice won't send; agent suggests refresh; customer already tried it. Stateless agent repeats the same suggestion.",
+    "turns": [
+      {
+        "turn": 1,
+        "message": "My invoice #5502 won't send. I click the Send button and nothing happens at all.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 2,
+        "message": "I already tried refreshing the page and clearing my browser cache like you suggested. Still not sending.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": "already tried cache cleared failed",
+          "response_must_not_repeat": "try refreshing"
+        }
+      },
+      {
+        "turn": 3,
+        "message": "This has been broken for two days now. I need to get paid today or I'm going to lose this client.",
+        "label": {
+          "category": "churn_risk",
+          "priority": "P0",
+          "response_must_reference": "already tried workaround escalate urgent",
+          "response_must_not_repeat": "try refreshing"
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "MT-002",
+    "scenario_type": "memory_required",
+    "failure_mode": 1,
+    "description": "2FA code not arriving; agent suggests checking spam; customer already checked. Stateless agent repeats spam check.",
+    "turns": [
+      {
+        "turn": 1,
+        "message": "I'm not receiving my two-factor authentication code by email. I can't log in to my account at all.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 2,
+        "message": "I already checked my spam folder — it's definitely not there. I've been waiting 10 minutes.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": "spam folder checked alternative resend",
+          "response_must_not_repeat": "check your spam"
+        }
+      },
+      {
+        "turn": 3,
+        "message": "I have a client meeting starting in 45 minutes and I need to pull up their invoice. This is really bad.",
+        "label": {
+          "category": "churn_risk",
+          "priority": "P0",
+          "response_must_reference": "spam checked urgent deadline escalate",
+          "response_must_not_repeat": "check your spam"
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "MT-003",
+    "scenario_type": "context_exhaustion",
+    "failure_mode": 2,
+    "description": "Long billing dispute across turns 1-2 with specific dates. Turn 3 references an April 3rd detail only present in turn 1. With MAX_HISTORY_TURNS=2, that detail is lost.",
+    "turns": [
+      {
+        "turn": 1,
+        "message": "I need to dispute three separate charges on my account from the past six weeks. On April 3rd I was charged $49 for the Pro plan even though I downgraded to Starter on March 28th — well before the next billing cycle. Then on April 18th there was a completely unrecognised $29 charge. My plan should be $19 per month on Starter. And then on May 2nd there was another $49 charge. I've been a Ledgr customer for two years and this is incredibly frustrating. I have my bank statements if you need them.",
+        "label": {
+          "category": "billing",
+          "priority": "P1",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 2,
+        "message": "I can confirm my downgrade request was submitted on March 28th — I have the email confirmation with reference number LDG-2024-0328-DG. My account dashboard still shows Pro plan which suggests the downgrade never actually processed on your end.",
+        "label": {
+          "category": "billing",
+          "priority": "P1",
+          "response_must_reference": "downgrade March reference billing dispute",
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 3,
+        "message": "Can you confirm that the April 3rd charge specifically is being investigated? I want to make sure that date hasn't been lost in the ticket.",
+        "label": {
+          "category": "billing",
+          "priority": "P1",
+          "response_must_reference": "April 3rd charge specifically",
+          "response_must_not_repeat": null
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "MT-004",
+    "scenario_type": "consistency_test",
+    "failure_mode": 4,
+    "description": "VAT calculation bug in turns 1-2. Turn 3 customer asks where to find VAT settings, which looks like how_to in isolation. With memory, it should remain bug/P1.",
+    "turns": [
+      {
+        "turn": 1,
+        "message": "My last invoice is showing 20% VAT but I definitely set the rate to 19% for German clients. The calculated total is wrong.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 2,
+        "message": "I went back and checked the invoice settings — the rate field clearly shows 19% but the total is still calculating as if it were 20%. Something in the calculation engine seems off.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": "19% rate calculating 20% bug persists",
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 3,
+        "message": "Actually, where exactly is the VAT rate configuration page? I want to take a screenshot of my settings to send to your support team.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": "ongoing VAT calculation bug investigation",
+          "response_must_not_repeat": null
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "MT-005",
+    "scenario_type": "consistency_test",
+    "failure_mode": 4,
+    "description": "Customer explicitly threatens cancellation in turns 1-2 due to billing overcharges. Turn 3 asks a calm policy question. Without memory, agent de-escalates to how_to/P3.",
+    "turns": [
+      {
+        "turn": 1,
+        "message": "I've been overcharged three months in a row and I'm seriously thinking about cancelling Ledgr. This is completely unacceptable.",
+        "label": {
+          "category": "churn_risk",
+          "priority": "P0",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 2,
+        "message": "My plan is supposed to be $19 per month but I've been charged $29 every single month since January. I want this resolved immediately or I'm leaving.",
+        "label": {
+          "category": "churn_risk",
+          "priority": "P0",
+          "response_must_reference": "cancellation intent billing overcharge months",
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 3,
+        "message": "Can you walk me through your refund policy? I want to understand what I'm entitled to.",
+        "label": {
+          "category": "churn_risk",
+          "priority": "P1",
+          "response_must_reference": "cancellation intent billing dispute refund",
+          "response_must_not_repeat": null
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "MT-006",
+    "scenario_type": "irrelevant_context",
+    "failure_mode": 3,
+    "description": "Resolved how_to conversation in turns 1-2. Turn 3 opens a new billing issue. Prior resolved how_to context is irrelevant and may contaminate the billing classification.",
+    "turns": [
+      {
+        "turn": 1,
+        "message": "How do I add my business logo to my invoices?",
+        "label": {
+          "category": "how_to",
+          "priority": "P3",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 2,
+        "message": "I found it — Design Settings then Header section. Got it working, thanks!",
+        "label": {
+          "category": "how_to",
+          "priority": "P3",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 3,
+        "message": "Quick new issue — I just noticed I was charged $49 this month but I'm on the $19 Starter plan. Can you look into that?",
+        "label": {
+          "category": "billing",
+          "priority": "P1",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "MT-007",
+    "scenario_type": "irrelevant_context",
+    "failure_mode": 3,
+    "description": "Feature request conversation in turns 1-2. Turn 3 reports an unrelated bug. Prior feature_request context may pull the agent toward wrong category.",
+    "turns": [
+      {
+        "turn": 1,
+        "message": "It would be really useful if Ledgr had a way to bulk-send invoices. I have over 50 clients and sending one by one takes forever.",
+        "label": {
+          "category": "feature_request",
+          "priority": "P2",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 2,
+        "message": "Yeah, I spend about two hours every billing cycle just clicking send individually. It would be a huge time saver.",
+        "label": {
+          "category": "feature_request",
+          "priority": "P2",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 3,
+        "message": "Completely different problem — when I export an invoice to PDF, the file comes out completely blank. Nothing on the page at all.",
+        "label": {
+          "category": "bug",
+          "priority": "P2",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "MT-008",
+    "scenario_type": "memory_required",
+    "failure_mode": 1,
+    "description": "Tax report discrepancy; agent suggests regenerating; customer tried it, still wrong. Stateless agent repeats the regenerate suggestion.",
+    "turns": [
+      {
+        "turn": 1,
+        "message": "My Q4 tax summary report shows $12,340 in total income but when I add up all my invoices manually the real total is $14,200. The report is missing almost $1,900.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 2,
+        "message": "I tried regenerating the report from the Tax Reports section exactly like you said. The number didn't change — still showing $12,340.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": "regeneration attempted report still wrong",
+          "response_must_not_repeat": "try regenerating"
+        }
+      },
+      {
+        "turn": 3,
+        "message": "My accountant needs the correct income figure by end of day Friday. I cannot file my taxes with a number that's $1,900 off.",
+        "label": {
+          "category": "churn_risk",
+          "priority": "P0",
+          "response_must_reference": "regeneration failed deadline urgent escalate",
+          "response_must_not_repeat": "try regenerating"
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "MT-009",
+    "scenario_type": "context_exhaustion",
+    "failure_mode": 2,
+    "description": "Detailed bug report with specific account ID and invoice number in turn 1. Turn 3 references those identifiers. With MAX_HISTORY_TURNS=2, turn 1 details are lost.",
+    "turns": [
+      {
+        "turn": 1,
+        "message": "I'm seeing a persistent bug with the invoice line item editor. When I add a value to the recurring_items field on a line item and save the invoice, the value disappears when I reopen it — the field goes blank. This only happens when the invoice has the tax_override flag set to true. I've tested it on Chrome 124 and Firefox 125, same behaviour on both. This started happening after last Tuesday's update. My account ID is LDG-4471 and you can reproduce it exactly with invoice #3891.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 2,
+        "message": "To be more precise: the recurring_items field saves correctly when tax_override is false. It's specifically the combination of recurring_items and tax_override=true that breaks it. I also noticed that if I toggle tax_override back to false and then to true again, the value briefly reappears and then vanishes on the next autosave.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": "recurring_items tax_override combination bug",
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 3,
+        "message": "Have you been able to look at this from your end? I really need you to check invoice #3891 on account LDG-4471 to reproduce what I'm seeing.",
+        "label": {
+          "category": "bug",
+          "priority": "P1",
+          "response_must_reference": "invoice 3891 LDG-4471 account reproduce",
+          "response_must_not_repeat": null
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "MT-010",
+    "scenario_type": "consistency_test",
+    "failure_mode": 4,
+    "description": "Feature request escalates to churn risk in turn 2 as customer mentions switching. Turn 3 asks about competitor features, which looks like feature_request in isolation but is churn_risk in context.",
+    "turns": [
+      {
+        "turn": 1,
+        "message": "Ledgr really needs a bulk invoice sending feature. I have 50+ clients and having to send each invoice individually is incredibly time-consuming.",
+        "label": {
+          "category": "feature_request",
+          "priority": "P2",
+          "response_must_reference": null,
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 2,
+        "message": "I spend literally two hours every billing cycle on this. It's become a real productivity killer and I'm honestly considering switching to FreshBooks or Wave because of it.",
+        "label": {
+          "category": "churn_risk",
+          "priority": "P1",
+          "response_must_reference": "switching competitors considering FreshBooks Wave",
+          "response_must_not_repeat": null
+        }
+      },
+      {
+        "turn": 3,
+        "message": "Do FreshBooks or Wave actually offer bulk invoice sending? I want to know what I'd be getting if I switched.",
+        "label": {
+          "category": "churn_risk",
+          "priority": "P1",
+          "response_must_reference": "switching evaluation alternatives FreshBooks",
+          "response_must_not_repeat": null
+        }
+      }
+    ]
+  }
+]

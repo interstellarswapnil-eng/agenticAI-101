@@ -1,0 +1,1045 @@
+{
+  "summary": {
+    "total_scenarios": 10,
+    "total_turns": 30,
+    "memory_agent": {
+      "category_accuracy": 0.8,
+      "priority_accuracy": 0.567,
+      "context_awareness_pass_rate": 0.375,
+      "context_awareness_applicable_turns": 16
+    },
+    "baseline_agent": {
+      "category_accuracy": 0.733,
+      "priority_accuracy": 0.733
+    },
+    "regression": {
+      "category_accuracy_delta": 0.067,
+      "priority_accuracy_delta": -0.167,
+      "interpretation": "positive = memory agent better; negative = memory agent regression"
+    },
+    "per_scenario_type": {
+      "memory_required": {
+        "memory_cat_accuracy": 0.778,
+        "baseline_cat_accuracy": 0.667,
+        "context_awareness_pass_rate": 0.167
+      },
+      "irrelevant_context": {
+        "memory_cat_accuracy": 1.0,
+        "baseline_cat_accuracy": 1.0,
+        "context_awareness_pass_rate": null
+      },
+      "consistency_test": {
+        "memory_cat_accuracy": 0.667,
+        "baseline_cat_accuracy": 0.556,
+        "context_awareness_pass_rate": 0.167
+      },
+      "context_exhaustion": {
+        "memory_cat_accuracy": 0.833,
+        "baseline_cat_accuracy": 0.833,
+        "context_awareness_pass_rate": 1.0
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "scenario_id": "MT-001",
+      "scenario_type": "memory_required",
+      "failure_mode": 1,
+      "turns": [
+        {
+          "turn": 1,
+          "message": "My invoice #5502 won't send. I click the Send button and nothing happens at all.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "We're sorry to hear that your invoice isn't sending. This sounds like a critical issue. We will investigate this immediately. Please hold tight while we work on a resolution.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "We're sorry to hear that you're experiencing issues with sending your invoice. Our team is aware of the problem and is working to resolve it as quickly as possible. In the meantime, please let us know if you have any other questions or need further assistance.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": false
+        },
+        {
+          "turn": 2,
+          "message": "I already tried refreshing the page and clearing my browser cache like you suggested. Still not sending.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": "already tried cache cleared failed",
+            "response_must_not_repeat": "try refreshing"
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "Thank you for your patience and for trying those steps. Since the issue persists, we're escalating this matter for immediate attention. Our team will work to resolve the sending issue with your invoice as quickly as possible.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": false,
+            "reason": "response does not reference prior context 'already tried cache cleared failed' (0/5 keywords matched, need \u22652)"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "I'm sorry to hear that you're still experiencing issues with sending. We'll investigate this immediately and get back to you with a solution.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": false
+        },
+        {
+          "turn": 3,
+          "message": "This has been broken for two days now. I need to get paid today or I'm going to lose this client.",
+          "label": {
+            "category": "churn_risk",
+            "priority": "P0",
+            "response_must_reference": "already tried workaround escalate urgent",
+            "response_must_not_repeat": "try refreshing"
+          },
+          "prediction": {
+            "category": "churn_risk",
+            "priority": "P0",
+            "response_draft": "I completely understand the urgency of this situation, and I'm very sorry for the inconvenience. Our team is prioritizing this issue to ensure your invoice can be sent immediately. We'll keep you updated on our progress.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": false,
+            "reason": "response does not reference prior context 'already tried workaround escalate urgent' (0/5 keywords matched, need \u22652)"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "We're sorry to hear you're experiencing this issue. We'll investigate immediately to resolve it and ensure you can get paid. Please hold tight while we assess the situation.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": false,
+          "baseline_priority_correct": true
+        }
+      ]
+    },
+    {
+      "scenario_id": "MT-002",
+      "scenario_type": "memory_required",
+      "failure_mode": 1,
+      "turns": [
+        {
+          "turn": 1,
+          "message": "I'm not receiving my two-factor authentication code by email. I can't log in to my account at all.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "We're sorry to hear you're having trouble receiving your two-factor authentication code. This is preventing you from accessing your account. We're looking into this issue immediately and will provide you with an update as soon as possible. In the meantime, please check your spam or junk folder to see if the email may have been filtered there.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "We're sorry to hear that you're having trouble receiving your two-factor authentication code. This is critical for logging into your account. Please check your spam folder and ensure your email address is correct. If the problem persists, we will assist you in regaining access immediately.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": false
+        },
+        {
+          "turn": 2,
+          "message": "I already checked my spam folder \u00e2\u20ac\u201d it's definitely not there. I've been waiting 10 minutes.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": "spam folder checked alternative resend",
+            "response_must_not_repeat": "check your spam"
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "I apologize for the inconvenience and the delay. Since the code is still not coming through, we are escalating this issue to our technical team for immediate attention. We will work to resolve this as quickly as possible so you can regain access to your account. Thank you for your patience.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": false,
+            "reason": "response does not reference prior context 'spam folder checked alternative resend' (0/5 keywords matched, need \u22652)"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "We're sorry to hear that you haven't received the expected email. We'll investigate this issue immediately and keep you updated. Thank you for your patience.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 3,
+          "message": "I have a client meeting starting in 45 minutes and I need to pull up their invoice. This is really bad.",
+          "label": {
+            "category": "churn_risk",
+            "priority": "P0",
+            "response_must_reference": "spam checked urgent deadline escalate",
+            "response_must_not_repeat": "check your spam"
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "I understand the urgency, and I'm really sorry for the trouble you're experiencing. We are looking into this issue right now and will do everything we can to resolve it before your meeting. Thank you for your patience.",
+            "confidence": "high"
+          },
+          "category_correct": false,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": false,
+            "reason": "response does not reference prior context 'spam checked urgent deadline escalate' (0/5 keywords matched, need \u22652)"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "I understand this is urgent and I'm here to help. Can you please let me know what issue you're facing while trying to pull up the invoice? We'll resolve it as quickly as possible.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": false,
+          "baseline_priority_correct": true
+        }
+      ]
+    },
+    {
+      "scenario_id": "MT-003",
+      "scenario_type": "context_exhaustion",
+      "failure_mode": 2,
+      "turns": [
+        {
+          "turn": 1,
+          "message": "I need to dispute three separate charges on my account from the past six weeks. On April 3rd I was charged $49 for the Pro plan even though I downgraded to Starter on March 28th \u00e2\u20ac\u201d well before the next billing cycle. Then on April 18th there was a completely unrecognised $29 charge. My plan should be $19 per month on Starter. And then on May 2nd there was another $49 charge. I've been a Ledgr customer for two years and this is incredibly frustrating. I have my bank statements if you need them.",
+          "label": {
+            "category": "billing",
+            "priority": "P1",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "billing",
+            "priority": "P1",
+            "response_draft": "I'm sorry to hear about the issues you've experienced with your billing. I understand how frustrating this must be. I will assist you in disputing these charges and ensure that your account reflects the correct plan and charges moving forward. Can you please provide the details of each charge, including the dates and amounts, so we can investigate this for you?",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "billing",
+            "priority": "P1",
+            "response_draft": "I'm sorry to hear about the issues with your charges. I will assist you in disputing these charges and getting this resolved promptly. Please hold on while I gather some details about your account.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 2,
+          "message": "I can confirm my downgrade request was submitted on March 28th \u00e2\u20ac\u201d I have the email confirmation with reference number LDG-2024-0328-DG. My account dashboard still shows Pro plan which suggests the downgrade never actually processed on your end.",
+          "label": {
+            "category": "billing",
+            "priority": "P1",
+            "response_must_reference": "downgrade March reference billing dispute",
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "Thank you for providing the confirmation details. It appears that your downgrade request did not process correctly, which is causing the billing discrepancies you experienced. I will escalate this issue to our technical team immediately to ensure your account is updated to the Starter plan. We appreciate your patience as we resolve this matter.",
+            "confidence": "high"
+          },
+          "category_correct": false,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": true,
+            "reason": "response correctly incorporates prior context"
+          },
+          "baseline_prediction": {
+            "category": "billing",
+            "priority": "P1",
+            "response_draft": "Thank you for reaching out and providing the reference number. I will investigate your downgrade request and ensure it is processed as soon as possible. We appreciate your patience.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 3,
+          "message": "Can you confirm that the April 3rd charge specifically is being investigated? I want to make sure that date hasn't been lost in the ticket.",
+          "label": {
+            "category": "billing",
+            "priority": "P1",
+            "response_must_reference": "April 3rd charge specifically",
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "billing",
+            "priority": "P1",
+            "response_draft": "Yes, I can confirm that the charge from April 3rd is part of the ongoing investigation. We are looking into the matter and will provide you with an update as soon as possible. Thank you for bringing this to our attention.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": true,
+            "reason": "response correctly incorporates prior context"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "I can confirm that we are investigating the charge from April 3rd. Your concerns have been noted, and we will ensure that this date is not overlooked in our ticketing system. Thank you for your patience.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": false,
+          "baseline_priority_correct": true
+        }
+      ]
+    },
+    {
+      "scenario_id": "MT-004",
+      "scenario_type": "consistency_test",
+      "failure_mode": 4,
+      "turns": [
+        {
+          "turn": 1,
+          "message": "My last invoice is showing 20% VAT but I definitely set the rate to 19% for German clients. The calculated total is wrong.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "Thank you for bringing this to our attention. It seems there is an issue with the VAT rate displayed on your invoice. We'll look into this immediately and get back to you with a resolution.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "We're sorry to hear that you're experiencing issues with the VAT rate on your invoice. We'll investigate this discrepancy with the calculated total and get back to you as soon as possible.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 2,
+          "message": "I went back and checked the invoice settings \u00e2\u20ac\u201d the rate field clearly shows 19% but the total is still calculating as if it were 20%. Something in the calculation engine seems off.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": "19% rate calculating 20% bug persists",
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "I apologize for the inconvenience this is causing. It appears there is a critical issue with the calculation engine that is affecting your invoice totals. We will prioritize this and investigate urgently to resolve it as soon as possible.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": false,
+            "reason": "response does not reference prior context '19% rate calculating 20% bug persists' (0/6 keywords matched, need \u22652)"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "Thank you for bringing this to our attention. We will investigate the discrepancy in the tax calculation on your invoice settings. Please hold on while we look into this issue and get back to you shortly.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 3,
+          "message": "Actually, where exactly is the VAT rate configuration page? I want to take a screenshot of my settings to send to your support team.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": "ongoing VAT calculation bug investigation",
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "how_to",
+            "priority": "P3",
+            "response_draft": "You can find the VAT rate configuration page by navigating to the 'Account Settings' menu and then selecting 'Tax Settings' from the dropdown. Please let me know if you need further assistance!",
+            "confidence": "high"
+          },
+          "category_correct": false,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": false,
+            "reason": "response does not reference prior context 'ongoing VAT calculation bug investigation' (1/5 keywords matched, need \u22652)"
+          },
+          "baseline_prediction": {
+            "category": "how_to",
+            "priority": "P3",
+            "response_draft": "You can find the VAT rate configuration page under the 'Tax Settings' section in your account settings. Let me know if you need further assistance!",
+            "confidence": "high"
+          },
+          "baseline_category_correct": false,
+          "baseline_priority_correct": false
+        }
+      ]
+    },
+    {
+      "scenario_id": "MT-005",
+      "scenario_type": "consistency_test",
+      "failure_mode": 4,
+      "turns": [
+        {
+          "turn": 1,
+          "message": "I've been overcharged three months in a row and I'm seriously thinking about cancelling Ledgr. This is completely unacceptable.",
+          "label": {
+            "category": "churn_risk",
+            "priority": "P0",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "churn_risk",
+            "priority": "P0",
+            "response_draft": "I\u2019m very sorry to hear about the overcharging issue and understand your frustration. I want to resolve this for you immediately. Could you please provide more details about the charges you were expecting versus what you were billed? We\u2019ll do our best to fix this and ensure it doesn\u2019t happen again.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "churn_risk",
+            "priority": "P0",
+            "response_draft": "I'm very sorry to hear about the overcharges you've experienced. This is clearly frustrating and unacceptable. I want to assist you in resolving this issue as quickly as possible. Please provide me with the details of the charges so we can investigate and ensure this doesn't happen again.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 2,
+          "message": "My plan is supposed to be $19 per month but I've been charged $29 every single month since January. I want this resolved immediately or I'm leaving.",
+          "label": {
+            "category": "churn_risk",
+            "priority": "P0",
+            "response_must_reference": "cancellation intent billing overcharge months",
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "churn_risk",
+            "priority": "P0",
+            "response_draft": "I completely understand your frustration and I apologize for the repeated overcharges. We need to resolve this now. I will escalate your issue to our billing team immediately to ensure you are charged the correct amount moving forward. Please hold tight as we work on this for you.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": true,
+            "reason": "response correctly incorporates prior context"
+          },
+          "baseline_prediction": {
+            "category": "billing",
+            "priority": "P0",
+            "response_draft": "I understand your frustration regarding the incorrect charges. I will prioritize resolving this billing issue for you immediately. Please hold on while I investigate this matter.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": false,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 3,
+          "message": "Can you walk me through your refund policy? I want to understand what I'm entitled to.",
+          "label": {
+            "category": "churn_risk",
+            "priority": "P1",
+            "response_must_reference": "cancellation intent billing dispute refund",
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "how_to",
+            "priority": "P3",
+            "response_draft": "Sure! Our refund policy states that you may be entitled to a refund if you cancel your subscription within the first 30 days. After that period, we generally do not offer refunds for monthly subscriptions. If you need more specific information regarding your situation, feel free to ask!",
+            "confidence": "high"
+          },
+          "category_correct": false,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": false,
+            "reason": "response does not reference prior context 'cancellation intent billing dispute refund' (1/5 keywords matched, need \u22652)"
+          },
+          "baseline_prediction": {
+            "category": "how_to",
+            "priority": "P3",
+            "response_draft": "Sure! Our refund policy generally allows for refunds under specific circumstances. You can find detailed information about the policy in the 'Billing' section of our website, or I can summarize it for you if you'd like.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": false,
+          "baseline_priority_correct": false
+        }
+      ]
+    },
+    {
+      "scenario_id": "MT-006",
+      "scenario_type": "irrelevant_context",
+      "failure_mode": 3,
+      "turns": [
+        {
+          "turn": 1,
+          "message": "How do I add my business logo to my invoices?",
+          "label": {
+            "category": "how_to",
+            "priority": "P3",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "how_to",
+            "priority": "P3",
+            "response_draft": "To add your business logo to your invoices, go to the 'Settings' section, then select 'Invoice Customization.' From there, you can upload your logo in the designated area. If you have any further questions, feel free to ask!",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "how_to",
+            "priority": "P3",
+            "response_draft": "You can add your business logo to your invoices by navigating to the Settings menu, then selecting 'Invoicing.' From there, you will see an option to upload your logo. If you have any trouble, let me know!",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 2,
+          "message": "I found it \u00e2\u20ac\u201d Design Settings then Header section. Got it working, thanks!",
+          "label": {
+            "category": "how_to",
+            "priority": "P3",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "how_to",
+            "priority": "P3",
+            "response_draft": "Great to hear you found it! If you have any more questions or need further assistance, just let me know.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "how_to",
+            "priority": "P3",
+            "response_draft": "I'm glad you found the Design Settings and got it working! If you have any more questions, feel free to ask.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 3,
+          "message": "Quick new issue \u00e2\u20ac\u201d I just noticed I was charged $49 this month but I'm on the $19 Starter plan. Can you look into that?",
+          "label": {
+            "category": "billing",
+            "priority": "P1",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "billing",
+            "priority": "P1",
+            "response_draft": "I\u2019m sorry to hear about the unexpected charge. I will look into this right away and get back to you shortly.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "billing",
+            "priority": "P1",
+            "response_draft": "Thank you for reaching out. I'll investigate the charge of $49 and get back to you shortly regarding this discrepancy. Please hold tight while I look into it.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        }
+      ]
+    },
+    {
+      "scenario_id": "MT-007",
+      "scenario_type": "irrelevant_context",
+      "failure_mode": 3,
+      "turns": [
+        {
+          "turn": 1,
+          "message": "It would be really useful if Ledgr had a way to bulk-send invoices. I have over 50 clients and sending one by one takes forever.",
+          "label": {
+            "category": "feature_request",
+            "priority": "P2",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "feature_request",
+            "priority": "P2",
+            "response_draft": "Thank you for your suggestion! We understand that bulk-sending invoices would greatly enhance your experience with Ledgr. We will take your feedback into consideration for future updates.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "feature_request",
+            "priority": "P2",
+            "response_draft": "Thank you for your suggestion! We understand that bulk-sending invoices would greatly enhance your workflow, especially with a large number of clients. We'll consider this feature for future updates.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 2,
+          "message": "Yeah, I spend about two hours every billing cycle just clicking send individually. It would be a huge time saver.",
+          "label": {
+            "category": "feature_request",
+            "priority": "P2",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "feature_request",
+            "priority": "P2",
+            "response_draft": "We appreciate your feedback and understand how much time-consuming it can be to send invoices individually. Your suggestion for a bulk-send feature is valuable, and we'll certainly consider it for future updates.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "feature_request",
+            "priority": "P2",
+            "response_draft": "Thank you for your feedback! We understand that sending invoices individually can be time-consuming, and we'll definitely take your suggestion into consideration for future updates.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 3,
+          "message": "Completely different problem \u00e2\u20ac\u201d when I export an invoice to PDF, the file comes out completely blank. Nothing on the page at all.",
+          "label": {
+            "category": "bug",
+            "priority": "P2",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "I'm sorry to hear that you're experiencing this issue with exporting invoices to PDF. This sounds like a bug that needs to be addressed. We'll investigate this matter immediately. In the meantime, please let me know if you need any alternative solutions.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "Thank you for bringing this to our attention. We're sorry to hear that your exported PDF invoice is blank. Our team is looking into this issue and will provide a fix as soon as possible. In the meantime, do you have any specific details about the invoice that might help us diagnose the problem?",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": false
+        }
+      ]
+    },
+    {
+      "scenario_id": "MT-008",
+      "scenario_type": "memory_required",
+      "failure_mode": 1,
+      "turns": [
+        {
+          "turn": 1,
+          "message": "My Q4 tax summary report shows $12,340 in total income but when I add up all my invoices manually the real total is $14,200. The report is missing almost $1,900.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "Thank you for bringing this to our attention. We'll investigate the discrepancy in your Q4 tax summary report and get back to you shortly. Please hold tight while we work on resolving this issue.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "Thank you for bringing this to our attention. We understand the importance of having accurate reports for your tax filings. We'll investigate the discrepancy in your Q4 tax summary report and get back to you shortly.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 2,
+          "message": "I tried regenerating the report from the Tax Reports section exactly like you said. The number didn't change \u00e2\u20ac\u201d still showing $12,340.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": "regeneration attempted report still wrong",
+            "response_must_not_repeat": "try regenerating"
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "I\u2019m sorry to hear that the report regeneration didn\u2019t resolve the issue. This sounds urgent since the incorrect total is impacting your tax filing. We will escalate this matter and look into it immediately to ensure the accurate report is generated. Thank you for your patience.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": true,
+            "reason": "response correctly incorporates prior context"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "Thank you for reaching out. It seems there may be an issue with the report regeneration process. We'll investigate why the reported amount is not updating as expected. In the meantime, could you please provide the specific report you're trying to regenerate?",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 3,
+          "message": "My accountant needs the correct income figure by end of day Friday. I cannot file my taxes with a number that's $1,900 off.",
+          "label": {
+            "category": "churn_risk",
+            "priority": "P0",
+            "response_must_reference": "regeneration failed deadline urgent escalate",
+            "response_must_not_repeat": "try regenerating"
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "I understand the urgency and the importance of resolving the $1,900 discrepancy in your income figure before the end of the day. We will prioritize this issue and work on getting you the correct report as soon as possible. Thank you for your patience.",
+            "confidence": "high"
+          },
+          "category_correct": false,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": false,
+            "reason": "response does not reference prior context 'regeneration failed deadline urgent escalate' (0/5 keywords matched, need \u22652)"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "We're sorry for the inconvenience. It sounds like there's an issue with the income figures reported. We'll investigate this immediately and provide you with the correct figures before the end of the day. Thank you for your patience.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": false,
+          "baseline_priority_correct": true
+        }
+      ]
+    },
+    {
+      "scenario_id": "MT-009",
+      "scenario_type": "context_exhaustion",
+      "failure_mode": 2,
+      "turns": [
+        {
+          "turn": 1,
+          "message": "I'm seeing a persistent bug with the invoice line item editor. When I add a value to the recurring_items field on a line item and save the invoice, the value disappears when I reopen it \u00e2\u20ac\u201d the field goes blank. This only happens when the invoice has the tax_override flag set to true. I've tested it on Chrome 124 and Firefox 125, same behaviour on both. This started happening after last Tuesday's update. My account ID is LDG-4471 and you can reproduce it exactly with invoice #3891.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "Thank you for reporting this issue with the invoice line item editor. We understand how critical it is for the recurring items to save correctly. Our team will prioritize this bug and investigate the problem with invoice #3891 and your account. We will keep you updated on our progress.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "Thank you for reporting this issue. We're sorry for the inconvenience you're experiencing with the invoice line item editor. Our team will investigate the bug related to the recurring_items field disappearing when the tax_override flag is set to true. We appreciate you providing the account ID and invoice number. We'll update you as soon as we have more information.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": false
+        },
+        {
+          "turn": 2,
+          "message": "To be more precise: the recurring_items field saves correctly when tax_override is false. It's specifically the combination of recurring_items and tax_override=true that breaks it. I also noticed that if I toggle tax_override back to false and then to true again, the value briefly reappears and then vanishes on the next autosave.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": "recurring_items tax_override combination bug",
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "Thank you for the additional details regarding the issue with the recurring_items field and tax_override. This specific combination should work seamlessly, and we appreciate your thorough testing. We will escalate this case to our development team for immediate investigation, and we'll keep you informed on our findings and any updates.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": true,
+            "reason": "response correctly incorporates prior context"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "Thank you for reporting this issue. It seems there might be a bug with the combination of recurring_items and tax_override. Our development team will look into this promptly. Please provide any additional details if possible.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 3,
+          "message": "Have you been able to look at this from your end? I really need you to check invoice #3891 on account LDG-4471 to reproduce what I'm seeing.",
+          "label": {
+            "category": "bug",
+            "priority": "P1",
+            "response_must_reference": "invoice 3891 LDG-4471 account reproduce",
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "bug",
+            "priority": "P0",
+            "response_draft": "We understand the urgency and importance of resolving this issue with invoice #3891 on your account. Our team is in the process of investigating this matter, and we will prioritize reproducing the issue you're experiencing. We\u2019ll get back to you with updates as soon as possible.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": true,
+            "reason": "response correctly incorporates prior context"
+          },
+          "baseline_prediction": {
+            "category": "bug",
+            "priority": "P1",
+            "response_draft": "Thank you for reaching out. We will investigate invoice #3891 on your account LDG-4471 and get back to you shortly with our findings.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        }
+      ]
+    },
+    {
+      "scenario_id": "MT-010",
+      "scenario_type": "consistency_test",
+      "failure_mode": 4,
+      "turns": [
+        {
+          "turn": 1,
+          "message": "Ledgr really needs a bulk invoice sending feature. I have 50+ clients and having to send each invoice individually is incredibly time-consuming.",
+          "label": {
+            "category": "feature_request",
+            "priority": "P2",
+            "response_must_reference": null,
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "feature_request",
+            "priority": "P2",
+            "response_draft": "Thank you for your feedback! We understand that having a bulk invoice sending feature would greatly enhance your experience. We'll pass along your suggestion to our product team for consideration in future updates.",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": null,
+            "reason": "not applicable for this turn"
+          },
+          "baseline_prediction": {
+            "category": "feature_request",
+            "priority": "P2",
+            "response_draft": "Thank you for your feedback! We understand that a bulk invoice sending feature would greatly enhance your experience and save time. We will consider this request for future updates.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 2,
+          "message": "I spend literally two hours every billing cycle on this. It's become a real productivity killer and I'm honestly considering switching to FreshBooks or Wave because of it.",
+          "label": {
+            "category": "churn_risk",
+            "priority": "P1",
+            "response_must_reference": "switching competitors considering FreshBooks Wave",
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "churn_risk",
+            "priority": "P1",
+            "response_draft": "We\u2019re sorry to hear that you\u2019re experiencing such frustration with the invoicing process. Your feedback is important, and we understand how this can impact your productivity. Please know that we are continuously working to improve our features. Is there anything we can assist you with in the meantime?",
+            "confidence": "high"
+          },
+          "category_correct": true,
+          "priority_correct": true,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": false,
+            "reason": "response does not reference prior context 'switching competitors considering FreshBooks Wave' (0/5 keywords matched, need \u22652)"
+          },
+          "baseline_prediction": {
+            "category": "churn_risk",
+            "priority": "P1",
+            "response_draft": "I\u2019m really sorry to hear that you\u2019re experiencing such frustration with our invoicing process. Your feedback is invaluable, and I\u2019d love to understand more about the specific challenges you're facing. Let's see how we can help improve your experience and make it more efficient for you.",
+            "confidence": "high"
+          },
+          "baseline_category_correct": true,
+          "baseline_priority_correct": true
+        },
+        {
+          "turn": 3,
+          "message": "Do FreshBooks or Wave actually offer bulk invoice sending? I want to know what I'd be getting if I switched.",
+          "label": {
+            "category": "churn_risk",
+            "priority": "P1",
+            "response_must_reference": "switching evaluation alternatives FreshBooks",
+            "response_must_not_repeat": null
+          },
+          "prediction": {
+            "category": "feature_request",
+            "priority": "P3",
+            "response_draft": "I can\u2019t provide specific features of FreshBooks or Wave, but it does sound like bulk invoice sending is important for your workflow. If you have further questions about our capabilities or if there's something specific you need, feel free to ask!",
+            "confidence": "medium"
+          },
+          "category_correct": false,
+          "priority_correct": false,
+          "context_awareness": {
+            "name": "context_awareness",
+            "pass": false,
+            "reason": "response does not reference prior context 'switching evaluation alternatives FreshBooks' (1/4 keywords matched, need \u22652)"
+          },
+          "baseline_prediction": {
+            "category": "feature_request",
+            "priority": "P3",
+            "response_draft": "Thank you for your inquiry! FreshBooks and Wave both offer bulk invoice sending as part of their features. If you have any more questions about switching, feel free to ask!",
+            "confidence": "high"
+          },
+          "baseline_category_correct": false,
+          "baseline_priority_correct": false
+        }
+      ]
+    }
+  ]
+}
