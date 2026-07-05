@@ -1,0 +1,1141 @@
+{
+  "summary": {
+    "schema_variant": "precise",
+    "total_cases": 16,
+    "tool_agent": {
+      "category_accuracy": 1.0,
+      "priority_accuracy": 0.625,
+      "tool_selection_pass_rate": 0.375,
+      "argument_fidelity_pass_rate": 0.5,
+      "argument_fidelity_applicable_cases": 16,
+      "avg_tool_calls": 1.88
+    },
+    "baseline_agent": {
+      "category_accuracy": 0.938,
+      "priority_accuracy": 0.375
+    },
+    "regression": {
+      "category_accuracy_delta": 0.062,
+      "priority_accuracy_delta": 0.25,
+      "interpretation": "positive = tool agent better; negative = tool agent regression"
+    },
+    "per_case_type": {
+      "tool_required": {
+        "tool_cat_accuracy": 1.0,
+        "baseline_cat_accuracy": 0.75,
+        "tool_pri_accuracy": 0.25,
+        "baseline_pri_accuracy": 0.25,
+        "tool_selection_pass_rate": 1.0,
+        "avg_tool_calls": 1.5
+      },
+      "no_tool_needed": {
+        "tool_cat_accuracy": 1.0,
+        "baseline_cat_accuracy": 1.0,
+        "tool_pri_accuracy": 0.75,
+        "baseline_pri_accuracy": 0.25,
+        "tool_selection_pass_rate": 0.0,
+        "avg_tool_calls": 1.5
+      },
+      "missing_info": {
+        "tool_cat_accuracy": 1.0,
+        "baseline_cat_accuracy": 1.0,
+        "tool_pri_accuracy": 0.5,
+        "baseline_pri_accuracy": 0.25,
+        "tool_selection_pass_rate": 0.0,
+        "avg_tool_calls": 3.0
+      },
+      "escalation_judgment": {
+        "tool_cat_accuracy": 1.0,
+        "baseline_cat_accuracy": 1.0,
+        "tool_pri_accuracy": 1.0,
+        "baseline_pri_accuracy": 0.75,
+        "tool_selection_pass_rate": 0.5,
+        "avg_tool_calls": 1.5
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "T-001",
+      "case_type": "tool_required",
+      "message": "The payment my client sent for INV-2044 shows as bounced?? I was counting on that money to cover studio rent this week. What is going on?",
+      "label": {
+        "category": "billing",
+        "priority": "P1"
+      },
+      "expected_tools": {
+        "required": [
+          "get_invoice_status"
+        ],
+        "forbidden": []
+      },
+      "expected_args": {
+        "get_invoice_status": {
+          "invoice_id": "INV-2044"
+        }
+      },
+      "prediction": {
+        "category": "billing",
+        "priority": "P0",
+        "response_draft": "Hello Diego, the payment for invoice INV-2044 has failed due to a card decline. This payment was critical for you to cover your studio rent this week. Please check with your client to resolve the issue as soon as possible. If there's anything else I can assist you with, please let me know.",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "get_invoice_status",
+          "arguments": {
+            "invoice_id": "INV-2044"
+          },
+          "result": {
+            "status": "failed",
+            "amount": 1250.0,
+            "currency": "USD",
+            "issued": "2026-06-28",
+            "customer_email": "diego@pixelpine.co",
+            "failure_reason": "card_declined",
+            "invoice_id": "INV-2044"
+          }
+        },
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "client@example.com"
+          },
+          "result": {
+            "error": "no customer account found for client@example.com"
+          }
+        },
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "diego@pixelpine.co"
+          },
+          "result": {
+            "name": "Diego Alarc\u00f3n",
+            "plan": "starter",
+            "account_status": "past_due",
+            "member_since": "2025-11-02",
+            "email": "diego@pixelpine.co"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": false,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": true,
+        "reason": "required tools called, no forbidden tools used"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": false,
+        "reason": "lookup_customer(email='client@example.com') \u2014 value appears in neither the message nor any earlier tool result (fabricated)"
+      },
+      "num_tool_calls": 3,
+      "baseline_prediction": {
+        "category": "billing",
+        "priority": "P0",
+        "response_draft": "I'm really sorry to hear that your payment has bounced. This is urgent, and I understand the impact it can have on your finances. Let's get this sorted out right away. Could you please provide me with any details you have regarding the transaction? We need to look into this immediately.",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": false
+    },
+    {
+      "id": "T-002",
+      "case_type": "tool_required",
+      "message": "My invoice emails aren't reaching clients. I sent two this morning and both clients say nothing arrived. Is something broken on your end?",
+      "label": {
+        "category": "bug",
+        "priority": "P0"
+      },
+      "expected_tools": {
+        "required": [
+          "check_known_issues"
+        ],
+        "forbidden": []
+      },
+      "expected_args": {
+        "check_known_issues": {
+          "feature_area": "invoicing"
+        }
+      },
+      "prediction": {
+        "category": "bug",
+        "priority": "P0",
+        "response_draft": "There is currently a major incident affecting invoice delivery emails, which are experiencing delays of up to 4 hours for all customers. We are actively working to resolve this issue. Please reassess if your clients have received the emails after this timeframe, and I apologize for the inconvenience caused.",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "check_known_issues",
+          "arguments": {
+            "feature_area": "invoicing"
+          },
+          "result": {
+            "active_incident": true,
+            "severity": "major",
+            "description": "Invoice delivery emails delayed up to 4 hours for all customers",
+            "started": "2026-07-05T06:10:00Z",
+            "feature_area": "invoicing"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": true,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": true,
+        "reason": "required tools called, no forbidden tools used"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": true,
+        "reason": "all arguments traceable to the message or prior tool results"
+      },
+      "num_tool_calls": 1,
+      "baseline_prediction": {
+        "category": "bug",
+        "priority": "P0",
+        "response_draft": "We're sorry to hear that your invoice emails aren't reaching your clients. This seems to be a critical issue. We're investigating this right now and will update you as soon as possible.",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": true
+    },
+    {
+      "id": "T-003",
+      "case_type": "tool_required",
+      "message": "The PDF export on my quarterly tax report keeps timing out when I try to download it. Anyone else seeing this?",
+      "label": {
+        "category": "bug",
+        "priority": "P2"
+      },
+      "expected_tools": {
+        "required": [
+          "check_known_issues"
+        ],
+        "forbidden": [
+          "escalate_to_human"
+        ]
+      },
+      "expected_args": {
+        "check_known_issues": {
+          "feature_area": "tax_reports"
+        }
+      },
+      "prediction": {
+        "category": "bug",
+        "priority": "P1",
+        "response_draft": "I understand you're having trouble exporting your quarterly tax report as a PDF. There are currently no known incidents affecting this feature, but I recommend trying again or using a different browser. If the issue persists, please let me know, and we can look into it further.",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "check_known_issues",
+          "arguments": {
+            "feature_area": "tax_reports"
+          },
+          "result": {
+            "active_incident": false,
+            "feature_area": "tax_reports"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": false,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": true,
+        "reason": "required tools called, no forbidden tools used"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": true,
+        "reason": "all arguments traceable to the message or prior tool results"
+      },
+      "num_tool_calls": 1,
+      "baseline_prediction": {
+        "category": "bug",
+        "priority": "P1",
+        "response_draft": "We're sorry to hear that you're experiencing issues with exporting your quarterly tax report. Our team is currently investigating the timeout problem. In the meantime, please try clearing your browser cache or using a different browser to see if that helps. Thank you for your patience.",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": false
+    },
+    {
+      "id": "T-004",
+      "case_type": "tool_required",
+      "message": "Can you confirm INV-3117 actually got paid? My client swears they sent payment last week and I don't want to nag them for nothing.",
+      "label": {
+        "category": "billing",
+        "priority": "P3"
+      },
+      "expected_tools": {
+        "required": [
+          "get_invoice_status"
+        ],
+        "forbidden": [
+          "escalate_to_human"
+        ]
+      },
+      "expected_args": {
+        "get_invoice_status": {
+          "invoice_id": "INV-3117"
+        }
+      },
+      "prediction": {
+        "category": "billing",
+        "priority": "P2",
+        "response_draft": "Yes, I can confirm that invoice INV-3117 for $480.00 was successfully paid. You do not need to follow up with your client about this payment.",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "get_invoice_status",
+          "arguments": {
+            "invoice_id": "INV-3117"
+          },
+          "result": {
+            "status": "paid",
+            "amount": 480.0,
+            "currency": "USD",
+            "issued": "2026-06-15",
+            "customer_email": "maya@studiofern.com",
+            "invoice_id": "INV-3117"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": false,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": true,
+        "reason": "required tools called, no forbidden tools used"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": true,
+        "reason": "all arguments traceable to the message or prior tool results"
+      },
+      "num_tool_calls": 1,
+      "baseline_prediction": {
+        "category": "bug",
+        "priority": "P1",
+        "response_draft": "I'm checking on the payment status for INV-3117 and will get back to you shortly with an update.",
+        "confidence": "high"
+      },
+      "baseline_category_correct": false,
+      "baseline_priority_correct": false
+    },
+    {
+      "id": "T-005",
+      "case_type": "no_tool_needed",
+      "message": "How do I set up recurring invoices for a monthly retainer client?",
+      "label": {
+        "category": "how_to",
+        "priority": "P3"
+      },
+      "expected_tools": {
+        "required": [],
+        "forbidden": [
+          "lookup_customer",
+          "get_invoice_status",
+          "check_known_issues",
+          "escalate_to_human"
+        ]
+      },
+      "expected_args": {},
+      "prediction": {
+        "category": "how_to",
+        "priority": "P3",
+        "response_draft": "To set up recurring invoices for a monthly retainer client, go to the 'Invoices' section in your Ledgr account. Here, you can select 'Create New Invoice' and choose the option for 'Recurring Invoices.' Follow the prompts to set the frequency to monthly and fill in the client details. If you need further assistance, please provide your account email or more details.",
+        "confidence": "medium"
+      },
+      "trajectory": [
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "client@example.com"
+          },
+          "result": {
+            "error": "no customer account found for client@example.com"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": true,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": false,
+        "reason": "called forbidden tool(s): ['lookup_customer']"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": false,
+        "reason": "lookup_customer(email='client@example.com') \u2014 value appears in neither the message nor any earlier tool result (fabricated)"
+      },
+      "num_tool_calls": 1,
+      "baseline_prediction": {
+        "category": "how_to",
+        "priority": "P2",
+        "response_draft": "To set up recurring invoices for a monthly retainer client, go to the 'Invoices' section, select 'Create Recurring Invoice,' and fill in the necessary details such as client information, amount, and frequency. Let us know if you need further assistance!",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": false
+    },
+    {
+      "id": "T-006",
+      "case_type": "no_tool_needed",
+      "message": "Does Ledgr integrate with QuickBooks? My accountant keeps asking.",
+      "label": {
+        "category": "feature_request",
+        "priority": "P3"
+      },
+      "expected_tools": {
+        "required": [],
+        "forbidden": [
+          "lookup_customer",
+          "get_invoice_status",
+          "check_known_issues",
+          "escalate_to_human"
+        ]
+      },
+      "expected_args": {},
+      "prediction": {
+        "category": "feature_request",
+        "priority": "P3",
+        "response_draft": "Currently, Ledgr does not have an integration with QuickBooks. We appreciate your feedback and will consider it for future development. If you'd like to suggest this integration formally, please let us know!",
+        "confidence": "medium"
+      },
+      "trajectory": [
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "not provided"
+          },
+          "result": {
+            "error": "no customer account found for not provided"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": true,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": false,
+        "reason": "called forbidden tool(s): ['lookup_customer']"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": true,
+        "reason": "all arguments traceable to the message or prior tool results"
+      },
+      "num_tool_calls": 1,
+      "baseline_prediction": {
+        "category": "feature_request",
+        "priority": "P3",
+        "response_draft": "Thank you for your inquiry about integration with QuickBooks. I will pass your request along to our product team. If you have any more questions, please feel free to ask!",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": true
+    },
+    {
+      "id": "T-007",
+      "case_type": "no_tool_needed",
+      "message": "Is there a way to bulk-export all my 2025 invoices as CSVs? Tax season prep.",
+      "label": {
+        "category": "feature_request",
+        "priority": "P3"
+      },
+      "expected_tools": {
+        "required": [],
+        "forbidden": [
+          "lookup_customer",
+          "get_invoice_status",
+          "check_known_issues",
+          "escalate_to_human"
+        ]
+      },
+      "expected_args": {},
+      "prediction": {
+        "category": "feature_request",
+        "priority": "P1",
+        "response_draft": "Currently, we do not support bulk exporting invoices as CSVs directly. However, given that we're experiencing a major incident affecting invoice delivery, this could impact your ability to access your invoices. Please be patient as we resolve this issue. In the meantime, you can manually export invoices one at a time. Let me know if you need help with that!",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "check_known_issues",
+          "arguments": {
+            "feature_area": "invoicing"
+          },
+          "result": {
+            "active_incident": true,
+            "severity": "major",
+            "description": "Invoice delivery emails delayed up to 4 hours for all customers",
+            "started": "2026-07-05T06:10:00Z",
+            "feature_area": "invoicing"
+          }
+        },
+        {
+          "tool": "check_known_issues",
+          "arguments": {
+            "feature_area": "tax_reports"
+          },
+          "result": {
+            "active_incident": false,
+            "feature_area": "tax_reports"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": false,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": false,
+        "reason": "called forbidden tool(s): ['check_known_issues']"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": true,
+        "reason": "all arguments traceable to the message or prior tool results"
+      },
+      "num_tool_calls": 2,
+      "baseline_prediction": {
+        "category": "feature_request",
+        "priority": "P2",
+        "response_draft": "Thank you for your inquiry! Currently, we do not support bulk exporting of invoices as CSVs. However, we appreciate your feedback, and I'll pass this request to our product team for consideration. Please let us know if you have any other questions.",
+        "confidence": "medium"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": false
+    },
+    {
+      "id": "T-008",
+      "case_type": "no_tool_needed",
+      "message": "Where do I change the default tax rate applied to new invoices? I just moved states and need my next invoice to use the new rate.",
+      "label": {
+        "category": "how_to",
+        "priority": "P2"
+      },
+      "expected_tools": {
+        "required": [],
+        "forbidden": [
+          "lookup_customer",
+          "get_invoice_status",
+          "check_known_issues",
+          "escalate_to_human"
+        ]
+      },
+      "expected_args": {},
+      "prediction": {
+        "category": "how_to",
+        "priority": "P2",
+        "response_draft": "To change the default tax rate applied to new invoices, go to the settings section of your Ledgr account. From there, you can navigate to the tax settings and adjust the default tax rate as needed. Please note that we are currently experiencing a major incident affecting invoice delivery emails, which may cause delays. If you need immediate assistance with another issue, please let us know.",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "example@example.com"
+          },
+          "result": {
+            "error": "no customer account found for example@example.com"
+          }
+        },
+        {
+          "tool": "check_known_issues",
+          "arguments": {
+            "feature_area": "invoicing"
+          },
+          "result": {
+            "active_incident": true,
+            "severity": "major",
+            "description": "Invoice delivery emails delayed up to 4 hours for all customers",
+            "started": "2026-07-05T06:10:00Z",
+            "feature_area": "invoicing"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": true,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": false,
+        "reason": "called forbidden tool(s): ['lookup_customer', 'check_known_issues']"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": false,
+        "reason": "lookup_customer(email='example@example.com') \u2014 value appears in neither the message nor any earlier tool result (fabricated)"
+      },
+      "num_tool_calls": 2,
+      "baseline_prediction": {
+        "category": "how_to",
+        "priority": "P1",
+        "response_draft": "To change the default tax rate for new invoices, please go to the 'Settings' section of your account. From there, select 'Tax Settings' and you will be able to update your default tax rate. If you have any further questions, feel free to ask!",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": false
+    },
+    {
+      "id": "T-009",
+      "case_type": "missing_info",
+      "message": "A payment failed on one of my invoices but I don't remember which one it was. Can you find it and retry the charge?",
+      "label": {
+        "category": "billing",
+        "priority": "P2"
+      },
+      "expected_tools": {
+        "required": [],
+        "forbidden": [
+          "get_invoice_status",
+          "lookup_customer"
+        ]
+      },
+      "expected_args": {},
+      "prediction": {
+        "category": "billing",
+        "priority": "P1",
+        "response_draft": "I wasn't able to locate your account. Could you please provide me with the email address associated with your Ledgr account? Once I have that, I can assist you in finding the failed payment and retrying the charge.",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "user@example.com"
+          },
+          "result": {
+            "error": "no customer account found for user@example.com"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": false,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": false,
+        "reason": "called forbidden tool(s): ['lookup_customer']"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": false,
+        "reason": "lookup_customer(email='user@example.com') \u2014 value appears in neither the message nor any earlier tool result (fabricated)"
+      },
+      "num_tool_calls": 1,
+      "baseline_prediction": {
+        "category": "billing",
+        "priority": "P1",
+        "response_draft": "I understand that a payment has failed on one of your invoices. Unfortunately, I can't directly access your account details to locate the invoice for you. Please check your payment history for any failed transactions or provide me with more details, and I will assist you further.",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": false
+    },
+    {
+      "id": "T-010",
+      "case_type": "missing_info",
+      "message": "Why was my subscription charged twice this month? I need this fixed before my accountant reconciles the books on Friday.",
+      "label": {
+        "category": "billing",
+        "priority": "P1"
+      },
+      "expected_tools": {
+        "required": [],
+        "forbidden": [
+          "get_invoice_status",
+          "lookup_customer"
+        ]
+      },
+      "expected_args": {},
+      "prediction": {
+        "category": "billing",
+        "priority": "P1",
+        "response_draft": "I need your account email to investigate why your subscription was charged twice this month. Please provide the email associated with your account so I can assist you promptly.",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "user@example.com"
+          },
+          "result": {
+            "error": "no customer account found for user@example.com"
+          }
+        },
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "subscription@example.com"
+          },
+          "result": {
+            "error": "no customer account found for subscription@example.com"
+          }
+        },
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "billing@example.com"
+          },
+          "result": {
+            "error": "no customer account found for billing@example.com"
+          }
+        },
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "chargedtwice@example.com"
+          },
+          "result": {
+            "error": "no customer account found for chargedtwice@example.com"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": true,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": false,
+        "reason": "called forbidden tool(s): ['lookup_customer']"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": false,
+        "reason": "lookup_customer(email='user@example.com') \u2014 value appears in neither the message nor any earlier tool result (fabricated); lookup_customer(email='subscription@example.com') \u2014 value appears in neither the message nor any earlier tool result (fabricated); lookup_customer(email='billing@example.com') \u2014 value appears in neither the message nor any earlier tool result (fabricated); lookup_customer(email='chargedtwice@example.com') \u2014 value appears in neither the message nor any earlier tool result (fabricated)"
+      },
+      "num_tool_calls": 4,
+      "baseline_prediction": {
+        "category": "billing",
+        "priority": "P0",
+        "response_draft": "I understand your concern about the double charge on your subscription this month. I'll investigate this issue immediately to ensure it is resolved before your accountant reconciles the books on Friday. Thank you for your patience.",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": false
+    },
+    {
+      "id": "T-011",
+      "case_type": "missing_info",
+      "message": "My account still shows the Pro plan but I upgraded to Studio last week. The Studio features are locked. Can you sort this out?",
+      "label": {
+        "category": "billing",
+        "priority": "P1"
+      },
+      "expected_tools": {
+        "required": [],
+        "forbidden": [
+          "get_invoice_status",
+          "lookup_customer"
+        ]
+      },
+      "expected_args": {},
+      "prediction": {
+        "category": "billing",
+        "priority": "P1",
+        "response_draft": "Could you please provide the email associated with your account so I can look into this upgrade issue for you?",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "example@example.com"
+          },
+          "result": {
+            "error": "no customer account found for example@example.com"
+          }
+        },
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "example@example.com"
+          },
+          "result": {
+            "error": "no customer account found for example@example.com"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": true,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": false,
+        "reason": "called forbidden tool(s): ['lookup_customer']"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": false,
+        "reason": "lookup_customer(email='example@example.com') \u2014 value appears in neither the message nor any earlier tool result (fabricated)"
+      },
+      "num_tool_calls": 2,
+      "baseline_prediction": {
+        "category": "billing",
+        "priority": "P1",
+        "response_draft": "Thank you for reaching out. I understand that your account still shows the Pro plan despite upgrading to Studio last week. I will investigate this issue and ensure that the Studio features are unlocked for you as soon as possible. Thank you for your patience.",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": true
+    },
+    {
+      "id": "T-012",
+      "case_type": "missing_info",
+      "message": "One of my invoices - INV-20-something, I can't remember the full number - shows the wrong VAT amount. Can you correct it?",
+      "label": {
+        "category": "bug",
+        "priority": "P2"
+      },
+      "expected_tools": {
+        "required": [],
+        "forbidden": [
+          "get_invoice_status"
+        ]
+      },
+      "expected_args": {},
+      "prediction": {
+        "category": "bug",
+        "priority": "P1",
+        "response_draft": "It appears that I cannot find an invoice with the ID you provided (INV-20-something). Could you please provide me with the complete invoice ID so I can help you correct the VAT amount?",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "get_invoice_status",
+          "arguments": {
+            "invoice_id": "INV-20-something"
+          },
+          "result": {
+            "error": "no invoice found with id INV-20-something"
+          }
+        },
+        {
+          "tool": "get_invoice_status",
+          "arguments": {
+            "invoice_id": "INV-20-0000"
+          },
+          "result": {
+            "error": "no invoice found with id INV-20-0000"
+          }
+        },
+        {
+          "tool": "get_invoice_status",
+          "arguments": {
+            "invoice_id": "INV-20-1234"
+          },
+          "result": {
+            "error": "no invoice found with id INV-20-1234"
+          }
+        },
+        {
+          "tool": "get_invoice_status",
+          "arguments": {
+            "invoice_id": "INV-20-5678"
+          },
+          "result": {
+            "error": "no invoice found with id INV-20-5678"
+          }
+        },
+        {
+          "tool": "get_invoice_status",
+          "arguments": {
+            "invoice_id": "INV-20-9999"
+          },
+          "result": {
+            "error": "no invoice found with id INV-20-9999"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": false,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": false,
+        "reason": "called forbidden tool(s): ['get_invoice_status']"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": false,
+        "reason": "get_invoice_status(invoice_id='INV-20-0000') \u2014 value appears in neither the message nor any earlier tool result (fabricated); get_invoice_status(invoice_id='INV-20-1234') \u2014 value appears in neither the message nor any earlier tool result (fabricated); get_invoice_status(invoice_id='INV-20-5678') \u2014 value appears in neither the message nor any earlier tool result (fabricated); get_invoice_status(invoice_id='INV-20-9999') \u2014 value appears in neither the message nor any earlier tool result (fabricated)"
+      },
+      "num_tool_calls": 5,
+      "baseline_prediction": {
+        "category": "bug",
+        "priority": "P1",
+        "response_draft": "Thank you for reaching out. I understand that one of your invoices shows the wrong VAT amount. I will look into this immediately and get it corrected for you. Could you please provide me with the full invoice number or any additional details that could help? ",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": false
+    },
+    {
+      "id": "T-013",
+      "case_type": "escalation_judgment",
+      "message": "This is the THIRD time this month invoicing has failed on me. I'm done - I'm moving everything to Bonsai on Monday unless someone actually fixes this today.",
+      "label": {
+        "category": "churn_risk",
+        "priority": "P0"
+      },
+      "expected_tools": {
+        "required": [
+          "escalate_to_human"
+        ],
+        "forbidden": []
+      },
+      "expected_args": {},
+      "prediction": {
+        "category": "churn_risk",
+        "priority": "P0",
+        "response_draft": "I apologize for the inconvenience you've faced with invoicing. We are currently experiencing a major incident that is causing delays in invoice delivery emails, lasting up to 4 hours. Our team is working to resolve this as quickly as possible. Please let me know if you have a specific account email so I can assist you further.",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "check_known_issues",
+          "arguments": {
+            "feature_area": "invoicing"
+          },
+          "result": {
+            "active_incident": true,
+            "severity": "major",
+            "description": "Invoice delivery emails delayed up to 4 hours for all customers",
+            "started": "2026-07-05T06:10:00Z",
+            "feature_area": "invoicing"
+          }
+        },
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "not provided"
+          },
+          "result": {
+            "error": "no customer account found for not provided"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": true,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": false,
+        "reason": "missing required tool call(s): ['escalate_to_human']"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": true,
+        "reason": "all arguments traceable to the message or prior tool results"
+      },
+      "num_tool_calls": 2,
+      "baseline_prediction": {
+        "category": "churn_risk",
+        "priority": "P0",
+        "response_draft": "I\u2019m really sorry to hear that you're experiencing repeated invoicing failures. I understand how frustrating this must be, and I want to help resolve this issue for you immediately. Please provide me with more details on the specific errors you're encountering so that we can work towards a solution before you make any decisions.",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": true
+    },
+    {
+      "id": "T-014",
+      "case_type": "escalation_judgment",
+      "message": "lena@brightform.design here. Your invoicing outage is blocking INV-1893 - a $2,900 invoice I have to send before my client's fiscal year closes tomorrow. I need this fixed now, not a workaround.",
+      "label": {
+        "category": "bug",
+        "priority": "P0"
+      },
+      "expected_tools": {
+        "required": [
+          "check_known_issues",
+          "escalate_to_human"
+        ],
+        "forbidden": []
+      },
+      "expected_args": {
+        "check_known_issues": {
+          "feature_area": "invoicing"
+        }
+      },
+      "prediction": {
+        "category": "bug",
+        "priority": "P0",
+        "response_draft": "Hello Lena, we acknowledge an active major incident affecting invoice delivery that may be impacting your ability to send INV-1893. I've created a ticket and escalated this to our support team for immediate assistance. They will work on resolving this issue as quickly as possible, given your urgency. Thank you for your patience.",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "check_known_issues",
+          "arguments": {
+            "feature_area": "invoicing"
+          },
+          "result": {
+            "active_incident": true,
+            "severity": "major",
+            "description": "Invoice delivery emails delayed up to 4 hours for all customers",
+            "started": "2026-07-05T06:10:00Z",
+            "feature_area": "invoicing"
+          }
+        },
+        {
+          "tool": "escalate_to_human",
+          "arguments": {
+            "reason": "Customer is facing a major incident blocking the sending of a time-sensitive invoice due to an invoicing outage.",
+            "priority": "P0"
+          },
+          "result": {
+            "ticket_id": "ESC-1042",
+            "status": "queued_for_human",
+            "reason_recorded": "Customer is facing a major incident blocking the sending of a time-sensitive invoice due to an invoicing outage.",
+            "priority": "P0"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": true,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": true,
+        "reason": "required tools called, no forbidden tools used"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": true,
+        "reason": "all arguments traceable to the message or prior tool results"
+      },
+      "num_tool_calls": 2,
+      "baseline_prediction": {
+        "category": "bug",
+        "priority": "P0",
+        "response_draft": "Hi Lena, I'm truly sorry for the inconvenience. We are currently experiencing an invoicing outage and our team is working to resolve the issue as quickly as possible. I'll make sure to keep you updated on the progress. Thank you for your patience.",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": true
+    },
+    {
+      "id": "T-015",
+      "case_type": "escalation_judgment",
+      "message": "Thinking about whether I still need the Pro plan next year. How do I see which features I'd lose if I downgraded? Not cancelling, just planning ahead.",
+      "label": {
+        "category": "how_to",
+        "priority": "P3"
+      },
+      "expected_tools": {
+        "required": [],
+        "forbidden": [
+          "escalate_to_human",
+          "lookup_customer"
+        ]
+      },
+      "expected_args": {},
+      "prediction": {
+        "category": "how_to",
+        "priority": "P3",
+        "response_draft": "To see which features you would lose if you downgrade from the Pro plan, you can visit the Pricing page on our website. It outlines the differences between the Pro plan and other tiers. If you have specific questions about features, feel free to ask!",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "lookup_customer",
+          "arguments": {
+            "email": "customer@example.com"
+          },
+          "result": {
+            "error": "no customer account found for customer@example.com"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": true,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": false,
+        "reason": "called forbidden tool(s): ['lookup_customer']"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": false,
+        "reason": "lookup_customer(email='customer@example.com') \u2014 value appears in neither the message nor any earlier tool result (fabricated)"
+      },
+      "num_tool_calls": 1,
+      "baseline_prediction": {
+        "category": "how_to",
+        "priority": "P2",
+        "response_draft": "You can view the features available in the Pro plan versus the Basic plan by navigating to the 'Pricing' section of our website. This section outlines the key features included with each plan, helping you assess what you might lose if you decide to downgrade.",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": false
+    },
+    {
+      "id": "T-016",
+      "case_type": "escalation_judgment",
+      "message": "The client portal has been loading really slowly for my client in Berlin - about 30 seconds a page. Not urgent, they can still view and pay invoices, but wanted to flag it.",
+      "label": {
+        "category": "bug",
+        "priority": "P2"
+      },
+      "expected_tools": {
+        "required": [
+          "check_known_issues"
+        ],
+        "forbidden": [
+          "escalate_to_human"
+        ]
+      },
+      "expected_args": {
+        "check_known_issues": {
+          "feature_area": "client_portal"
+        }
+      },
+      "prediction": {
+        "category": "bug",
+        "priority": "P2",
+        "response_draft": "Thank you for bringing this to our attention. We are currently aware of a minor issue affecting the client portal, causing slow loading times for some EU customers. Our team is actively working on a fix. In the meantime, your client can still view and pay invoices. We appreciate your patience.",
+        "confidence": "high"
+      },
+      "trajectory": [
+        {
+          "tool": "check_known_issues",
+          "arguments": {
+            "feature_area": "client_portal"
+          },
+          "result": {
+            "active_incident": true,
+            "severity": "minor",
+            "description": "Client portal pages loading slowly for some EU customers",
+            "started": "2026-07-04T18:40:00Z",
+            "feature_area": "client_portal"
+          }
+        }
+      ],
+      "category_correct": true,
+      "priority_correct": true,
+      "tool_selection": {
+        "name": "tool_selection",
+        "pass": true,
+        "reason": "required tools called, no forbidden tools used"
+      },
+      "argument_fidelity": {
+        "name": "argument_fidelity",
+        "pass": true,
+        "reason": "all arguments traceable to the message or prior tool results"
+      },
+      "num_tool_calls": 1,
+      "baseline_prediction": {
+        "category": "bug",
+        "priority": "P2",
+        "response_draft": "Thank you for bringing this to our attention. We're sorry to hear about the slow loading times in the client portal. Our team will investigate this issue to improve the performance for your client in Berlin. Please let us know if you notice any other issues.",
+        "confidence": "high"
+      },
+      "baseline_category_correct": true,
+      "baseline_priority_correct": true
+    }
+  ]
+}

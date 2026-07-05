@@ -15,7 +15,7 @@ for freelance designers), which provides a consistent, realistic domain across a
 |---------|--------|-------|------------|
 | A — Triage Agent | Done | Support triage agent + prompt iteration | Category accuracy: 76.7% → 86.7% over 3 prompt versions |
 | B — LLM-as-Judge | Done | LLM judge + calibration against human scores | 87% human-judge agreement on 10 calibration cases |
-| C — Memory & Context | Planned | Stateful agents; session memory; retrieval | — |
+| C — Memory & Context | Done | Multi-turn memory agent vs stateless baseline | Memory: +6.7 pts category accuracy, −16.7 pts priority accuracy vs stateless |
 | D — Tool Use | Planned | Function calling; multi-step reasoning; external APIs | — |
 | E — Multi-Agent | Planned | Orchestration; handoff protocols; failure modes | — |
 
@@ -180,11 +180,6 @@ Expected output shape:
 ---
 
 ## What's Next
-
-**Chapter C — Memory and Context:** Building an agent that maintains session state and
-uses retrieval to ground answers in prior conversation. The question this chapter is
-designed to answer: how do you evaluate correctness when the relevant context is spread
-across multiple turns?
 
 **Chapter D — Tool Use:** Function calling, multi-step reasoning, and connecting the
 agent to external APIs. The question: how do you evaluate correctness when the agent's

@@ -1,0 +1,194 @@
+[
+  {
+    "id": "T-001",
+    "case_type": "tool_required",
+    "message": "The payment my client sent for INV-2044 shows as bounced?? I was counting on that money to cover studio rent this week. What is going on?",
+    "label": { "category": "billing", "priority": "P1" },
+    "expected_tools": {
+      "required": ["get_invoice_status"],
+      "forbidden": []
+    },
+    "expected_args": { "get_invoice_status": { "invoice_id": "INV-2044" } },
+    "notes": "MOCK_DB: INV-2044 is failed (card_declined). P1 = billing discrepancy with stated financial pressure but no same-hour blocker. Escalation is defensible (failed payment, past_due account if chained) so it is not forbidden. Without the lookup, the agent cannot confirm the failure or its reason."
+  },
+  {
+    "id": "T-002",
+    "case_type": "tool_required",
+    "message": "My invoice emails aren't reaching clients. I sent two this morning and both clients say nothing arrived. Is something broken on your end?",
+    "label": { "category": "bug", "priority": "P0" },
+    "expected_tools": {
+      "required": ["check_known_issues"],
+      "forbidden": []
+    },
+    "expected_args": { "check_known_issues": { "feature_area": "invoicing" } },
+    "notes": "MOCK_DB: invoicing has an ACTIVE MAJOR incident (email delays up to 4h, all customers). P0 is only knowable by checking. Compare with T-003: identical message shape, healthy area, lower priority."
+  },
+  {
+    "id": "T-003",
+    "case_type": "tool_required",
+    "message": "The PDF export on my quarterly tax report keeps timing out when I try to download it. Anyone else seeing this?",
+    "label": { "category": "bug", "priority": "P2" },
+    "expected_tools": {
+      "required": ["check_known_issues"],
+      "forbidden": ["escalate_to_human"]
+    },
+    "expected_args": { "check_known_issues": { "feature_area": "tax_reports" } },
+    "notes": "MOCK_DB: tax_reports is healthy (active_incident false). Same shape as T-002 but the tool result says ordinary bug, no outage, no urgency stated -> P2. Escalation forbidden: no confirmed P0/P1 situation."
+  },
+  {
+    "id": "T-004",
+    "case_type": "tool_required",
+    "message": "Can you confirm INV-3117 actually got paid? My client swears they sent payment last week and I don't want to nag them for nothing.",
+    "label": { "category": "billing", "priority": "P3" },
+    "expected_tools": {
+      "required": ["get_invoice_status"],
+      "forbidden": ["escalate_to_human"]
+    },
+    "expected_args": { "get_invoice_status": { "invoice_id": "INV-3117" } },
+    "notes": "MOCK_DB: INV-3117 is paid. Near-identical question shape to T-001 but the lookup shows all is well -> reassurance, P3. The T-001/T-004 pair is the chapter's cleanest demo: same words, opposite urgency, only the tool knows."
+  },
+  {
+    "id": "T-005",
+    "case_type": "no_tool_needed",
+    "message": "How do I set up recurring invoices for a monthly retainer client?",
+    "label": { "category": "how_to", "priority": "P3" },
+    "expected_tools": {
+      "required": [],
+      "forbidden": ["lookup_customer", "get_invoice_status", "check_known_issues", "escalate_to_human"]
+    },
+    "expected_args": {},
+    "notes": "Pure how-to, nothing broken, no account data needed. Any tool call here is over-calling. Smoke test showed the agent calling check_known_issues on exactly this kind of message."
+  },
+  {
+    "id": "T-006",
+    "case_type": "no_tool_needed",
+    "message": "Does Ledgr integrate with QuickBooks? My accountant keeps asking.",
+    "label": { "category": "feature_request", "priority": "P3" },
+    "expected_tools": {
+      "required": [],
+      "forbidden": ["lookup_customer", "get_invoice_status", "check_known_issues", "escalate_to_human"]
+    },
+    "expected_args": {},
+    "notes": "Tie-break rule: 'Does it integrate with Y?' -> always feature_request. No tool can answer an integration question; the answer lives in the prompt/product knowledge."
+  },
+  {
+    "id": "T-007",
+    "case_type": "no_tool_needed",
+    "message": "Is there a way to bulk-export all my 2025 invoices as CSVs? Tax season prep.",
+    "label": { "category": "feature_request", "priority": "P3" },
+    "expected_tools": {
+      "required": [],
+      "forbidden": ["lookup_customer", "get_invoice_status", "check_known_issues", "escalate_to_human"]
+    },
+    "expected_args": {},
+    "notes": "Tie-break rule: 'Can I X?' where X is a bulk operation -> feature_request. Mentions invoices, which may tempt an invoice lookup, but there is no ID and nothing to look up."
+  },
+  {
+    "id": "T-008",
+    "case_type": "no_tool_needed",
+    "message": "Where do I change the default tax rate applied to new invoices? I just moved states and need my next invoice to use the new rate.",
+    "label": { "category": "how_to", "priority": "P2" },
+    "expected_tools": {
+      "required": [],
+      "forbidden": ["lookup_customer", "get_invoice_status", "check_known_issues", "escalate_to_human"]
+    },
+    "expected_args": {},
+    "notes": "P2 = workflow question with a specific pain point (upcoming invoice must be correct). Still zero tools: it's a where-do-I-click question, not a data question."
+  },
+  {
+    "id": "T-009",
+    "case_type": "missing_info",
+    "message": "A payment failed on one of my invoices but I don't remember which one it was. Can you find it and retry the charge?",
+    "label": { "category": "billing", "priority": "P2" },
+    "expected_tools": {
+      "required": [],
+      "forbidden": ["get_invoice_status", "lookup_customer"]
+    },
+    "expected_args": {},
+    "notes": "No invoice ID and no email in the message, so any get_invoice_status or lookup_customer call must have fabricated its argument. Correct behavior: ask for the invoice ID in response_draft. P2 pending the missing detail."
+  },
+  {
+    "id": "T-010",
+    "case_type": "missing_info",
+    "message": "Why was my subscription charged twice this month? I need this fixed before my accountant reconciles the books on Friday.",
+    "label": { "category": "billing", "priority": "P1" },
+    "expected_tools": {
+      "required": [],
+      "forbidden": ["get_invoice_status", "lookup_customer"]
+    },
+    "expected_args": {},
+    "notes": "Billing discrepancy + professional deadline -> P1 straight from the priority anchors; no lookup needed to know that. But there's no email in the message, so a lookup_customer call = fabricated argument. Ask which account / confirm email in the draft."
+  },
+  {
+    "id": "T-011",
+    "case_type": "missing_info",
+    "message": "My account still shows the Pro plan but I upgraded to Studio last week. The Studio features are locked. Can you sort this out?",
+    "label": { "category": "billing", "priority": "P1" },
+    "expected_tools": {
+      "required": [],
+      "forbidden": ["get_invoice_status", "lookup_customer"]
+    },
+    "expected_args": {},
+    "notes": "'Upgrade not reflected' is a literal P1 anchor in the prompt. No email given -> lookup_customer would require a fabricated address. The temptation: MOCK_DB has exactly one pro-plan-recently-active pattern to 'guess'."
+  },
+  {
+    "id": "T-012",
+    "case_type": "missing_info",
+    "message": "One of my invoices - INV-20-something, I can't remember the full number - shows the wrong VAT amount. Can you correct it?",
+    "label": { "category": "bug", "priority": "P2" },
+    "expected_tools": {
+      "required": [],
+      "forbidden": ["get_invoice_status"]
+    },
+    "expected_args": {},
+    "notes": "The nastiest fabrication bait in the set: a partial ID that autocompletes naturally to INV-2044 (which exists in MOCK_DB). Any full ID passed to get_invoice_status was invented. Wrong VAT = data bug per the category definitions. Correct behavior: ask for the full ID."
+  },
+  {
+    "id": "T-013",
+    "case_type": "escalation_judgment",
+    "message": "This is the THIRD time this month invoicing has failed on me. I'm done - I'm moving everything to Bonsai on Monday unless someone actually fixes this today.",
+    "label": { "category": "churn_risk", "priority": "P0" },
+    "expected_tools": {
+      "required": ["escalate_to_human"],
+      "forbidden": []
+    },
+    "expected_args": {},
+    "notes": "Stated intent to cancel with a deadline of today -> P0 churn_risk per the anchors, and escalation criterion (a) is met on the message alone. check_known_issues(invoicing) is a reasonable extra step (there IS an active incident) - allowed but not required."
+  },
+  {
+    "id": "T-014",
+    "case_type": "escalation_judgment",
+    "message": "lena@brightform.design here. Your invoicing outage is blocking INV-1893 - a $2,900 invoice I have to send before my client's fiscal year closes tomorrow. I need this fixed now, not a workaround.",
+    "label": { "category": "bug", "priority": "P0" },
+    "expected_tools": {
+      "required": ["check_known_issues", "escalate_to_human"],
+      "forbidden": []
+    },
+    "expected_args": { "check_known_issues": { "feature_area": "invoicing" } },
+    "notes": "Multi-step case: confirm the incident (active MAJOR in invoicing), then escalate - criterion (b), an active major incident blocking the customer. lookup_customer(lena@...) and get_invoice_status(INV-1893) are legitimate extras (both values are in the message) but not required."
+  },
+  {
+    "id": "T-015",
+    "case_type": "escalation_judgment",
+    "message": "Thinking about whether I still need the Pro plan next year. How do I see which features I'd lose if I downgraded? Not cancelling, just planning ahead.",
+    "label": { "category": "how_to", "priority": "P3" },
+    "expected_tools": {
+      "required": [],
+      "forbidden": ["escalate_to_human", "lookup_customer"]
+    },
+    "expected_args": {},
+    "notes": "The word 'cancelling' appears but the customer explicitly is NOT churning - it's a plan-comparison how-to, P3. Escalating this wastes a human's time and would read as panic. No email given, so lookup_customer is also a fabrication trap."
+  },
+  {
+    "id": "T-016",
+    "case_type": "escalation_judgment",
+    "message": "The client portal has been loading really slowly for my client in Berlin - about 30 seconds a page. Not urgent, they can still view and pay invoices, but wanted to flag it.",
+    "label": { "category": "bug", "priority": "P2" },
+    "expected_tools": {
+      "required": ["check_known_issues"],
+      "forbidden": ["escalate_to_human"]
+    },
+    "expected_args": { "check_known_issues": { "feature_area": "client_portal" } },
+    "notes": "MOCK_DB: client_portal has an active MINOR incident (slow EU loads) - checking is right and the draft should mention it's known. But minor + customer says 'not urgent' + workaround exists -> P2, and escalating a known minor issue fails the escalation criteria."
+  }
+]

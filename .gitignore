@@ -1,6 +1,7 @@
 .env
 __pycache__/
 *.pyc
+blog_chapter_*.md
 eval_results_*.json
 rubric_results.json
 calibration_results.json
